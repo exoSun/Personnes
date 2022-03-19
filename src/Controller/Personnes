@@ -33,7 +33,7 @@ class Personnes extends AbstractController
         }
 
         // Retrouver tous les articles
-        $sel = $doctrine->getRepository(Message::class);
+        $sel = $doctrine->getRepository(Personne::class);
         $allPersonnes = $sel->findBy([], ['nom' => 'ASC']);
 
         return $this->render('personne.html.twig', array(
