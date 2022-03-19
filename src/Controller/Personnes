@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Componant\Annotation\Route;
+use App\Form\PersonneType;
+use App\Entity\Personne;
+use Doctrine\Persistence\ManagerRegistry;
+
+class Personnes extends AbstractController
+{
+    /**
+     * @Route("/personnes")
+     */
+    public function personnes(Request $request, ManagerRegistry $doctrine)
+    {
+        $personne = new Personne();
+        $personne->setNom('');
+        $personne->setPrenom('');
+        $date = new \DateTime('@' . strtotime('now'));
+        $personne->setDateNaissance($date);
+        $form = $this->createForm(PersonneType::class, $personne);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $doctrine->getManager();
+
+            $em->persist($personne);
+            $em->flush();
+        }
+
+        // Retrouver tous les articles
+        $sel = $doctrine->getRepository(Message::class);
+        $allPersonnes = $sel->findBy([], ['nom' => 'ASC']);
+
+        return $this->render('personne.html.twig', array(
+            'form' => $form->createView(),
+            'list_personnes' => $allPersonnes,
+        ));
+    }
+}

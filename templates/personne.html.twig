@@ -1,0 +1,47 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Personne
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+{% endblock %}
+{% block javascripts %}
+	<script src="assets/js/personnes.js"></script>
+{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<h1>Personne</h1>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				{{ form_start(form, {
+                    'attr': {
+                        'novalidate': 'novalidate',
+                        'class': 'col-lg-5' 
+                        }
+                    }) 
+                }}
+				{{ form_row(form.nom) }}
+				{{ form_row(form.prenom) }}
+				{{ form_row(form.dateAnniverssaire) }}
+				<br/>
+				<button type="submit" class="btn btn-primary">Envoyer</button>
+				{{ form_end(form) }}
+			</div>
+			<a href="javascript:;">Visualiser</a>
+			<div class="col-6 liste_affichage">
+				{% for key, p in list_personnes %}
+					<table>
+						<tr style="">
+							<td>{{ p.nom }}</td>
+							<td>{{ p.prenom }}</td>
+							<td>{{ date().diff(date(p.dateNaissance)).y }}</td>
+						</tr>
+					</table>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
